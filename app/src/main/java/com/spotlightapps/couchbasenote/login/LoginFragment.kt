@@ -1,13 +1,15 @@
 package com.spotlightapps.couchbasenote.login
 
-import androidx.lifecycle.ViewModelProviders
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-
+import android.widget.Toast
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProviders
+import com.spotlightapps.couchbasenote.EventObserver
 import com.spotlightapps.couchbasenote.R
+import kotlinx.android.synthetic.main.login_fragment.*
 
 class LoginFragment : Fragment() {
 
@@ -17,15 +19,35 @@ class LoginFragment : Fragment() {
 
     private lateinit var viewModel: LoginViewModel
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         return inflater.inflate(R.layout.login_fragment, container, false)
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         viewModel = ViewModelProviders.of(this).get(LoginViewModel::class.java)
-        // TODO: Use the ViewModel
+        subscribeUI()
+        btnLogin.setOnClickListener {
+            viewModel.onLoginButtonClicked()
+        }
+        tvSingUp.setOnClickListener {
+            viewModel.onSignUpClicked()
+        }
+
     }
+
+    private fun subscribeUI() {
+        viewModel.onLoginClicked.observe(viewLifecycleOwner, EventObserver {
+            Toast.makeText(context, "Login button clicked", Toast.LENGTH_SHORT).show()
+        })
+
+        viewModel.onSignUpClicked.observe(viewLifecycleOwner, EventObserver {
+            Toast.makeText(context, "Sign up clicked", Toast.LENGTH_SHORT).show()
+        })
+    }
+
 
 }
