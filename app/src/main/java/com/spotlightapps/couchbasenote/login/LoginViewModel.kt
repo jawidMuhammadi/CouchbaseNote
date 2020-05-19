@@ -3,9 +3,10 @@ package com.spotlightapps.couchbasenote.login
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.spotlightapps.couchbasenote.AppRepository
 import com.spotlightapps.couchbasenote.Event
 
-class LoginViewModel : ViewModel() {
+class LoginViewModel(private val appRepository: AppRepository) : ViewModel() {
 
     private var _onSignUpClicked = MutableLiveData<Event<Unit>>()
     val onSignUpClicked: LiveData<Event<Unit>> = _onSignUpClicked

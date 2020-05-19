@@ -5,3 +5,4 @@ package com.spotlightapps.couchbasenote
  */
 
 const val DATABASE_NAME = "notes"
+const val KEY_USER_NAME = "user_name"

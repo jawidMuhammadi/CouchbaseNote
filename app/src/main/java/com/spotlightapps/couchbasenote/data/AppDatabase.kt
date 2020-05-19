@@ -12,14 +12,14 @@ import com.spotlightapps.couchbasenote.DATABASE_NAME
  */
 
 
-object AppDatabase {
+object DatabaseManager {
 
     @Volatile
     private var INSTANCE: Database? = null
 
     private var listener: ListenerToken? = null
 
-    fun getInstance(context: Context, userName: String): Database {
+    fun getDatabase(context: Context, userName: String): Database {
         return INSTANCE ?: createDatabase(context, userName).also {
             INSTANCE = it
         }
