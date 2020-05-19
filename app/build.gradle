@@ -24,7 +24,7 @@ android {
         }
     }
 
-    dataBinding{
+    dataBinding {
         enabled = true
     }
 
@@ -39,6 +39,7 @@ dependencies {
     def material = "1.1.0"
     def lifecycle_version = "2.2.0"
     def preference_version = "1.1.1"
+    def gson_version = "2.8.6"
 
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
@@ -65,4 +66,7 @@ dependencies {
 
     //preference
     implementation "androidx.preference:preference-ktx:$preference_version"
+
+    //gson
+    implementation "com.google.code.gson:gson:$gson_version"
 }

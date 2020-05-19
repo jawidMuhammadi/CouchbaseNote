@@ -12,33 +12,44 @@ import com.spotlightapps.couchbasenote.DATABASE_NAME
  */
 
 
-object DatabaseManager {
+class DatabaseManager private constructor(private val context: Context?) {
 
     @Volatile
-    private var INSTANCE: Database? = null
+    private var database: Database? = null
 
     private var listener: ListenerToken? = null
 
-    fun getDatabase(context: Context, userName: String): Database {
-        return INSTANCE ?: createDatabase(context, userName).also {
-            INSTANCE = it
+    companion object {
+        @Volatile
+        private var INSTANCE: DatabaseManager? = null
+
+        fun getInstance(context: Context?): DatabaseManager {
+            return INSTANCE ?: DatabaseManager(context).also {
+                INSTANCE = it
+            }
         }
     }
 
-    private fun createDatabase(context: Context, userName: String): Database {
+    fun getDatabase(userName: String): Database {
+        return database ?: createDatabase(context, userName).also {
+            database = it
+        }
+    }
+
+    private fun createDatabase(context: Context?, userName: String): Database {
         val configuration = DatabaseConfiguration()
         configuration.directory = String.format(
             "%s/%s",
-            context.filesDir,
+            context?.filesDir,
             userName
         )
         return Database(DATABASE_NAME, configuration)
     }
 
     fun registerForDatabaseChanges() {
-        INSTANCE?.addChangeListener { change ->
+        database?.addChangeListener { change ->
             for (docId in change.documentIDs) {
-                val document = INSTANCE?.getDocument(docId)
+                val document = database?.getDocument(docId)
                 document?.let {
                 }
             }
@@ -47,10 +58,10 @@ object DatabaseManager {
 
     fun closeDatabaseForUser(userName: String) {
         try {
-            INSTANCE?.let {
+            database?.let {
                 unRegisterForDatabaseChanges()
-                INSTANCE?.close()
-                INSTANCE = null
+                database?.close()
+                database = null
             }
         } catch (e: CouchbaseLiteException) {
             e.printStackTrace()
@@ -59,7 +70,7 @@ object DatabaseManager {
 
     private fun unRegisterForDatabaseChanges() {
         listener?.let {
-            INSTANCE?.removeChangeListener(it)
+            database?.removeChangeListener(it)
         }
 
     }

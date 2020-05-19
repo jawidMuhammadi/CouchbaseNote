@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
+import com.spotlightapps.couchbasenote.AppRepository
 import com.spotlightapps.couchbasenote.EventObserver
 import com.spotlightapps.couchbasenote.R
 import kotlinx.android.synthetic.main.login_fragment.*
@@ -28,7 +29,8 @@ class LoginFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel = ViewModelProviders.of(this).get(LoginViewModel::class.java)
+        val factory = LoginViewModelFactory(AppRepository.getInstance(context))
+        viewModel = ViewModelProviders.of(this, factory).get(LoginViewModel::class.java)
         subscribeUI()
         btnLogin.setOnClickListener {
             viewModel.onLoginButtonClicked()

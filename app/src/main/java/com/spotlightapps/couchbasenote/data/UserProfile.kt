@@ -9,9 +9,8 @@ import com.couchbase.lite.Blob
 data class UserProfile(
     var type: UserType,
     var name: String,
-    var email: String,
-    var address: String,
-    var image: Blob
+    var password: String?,
+    var address: String = "Pune"
 )
 
 enum class UserType {

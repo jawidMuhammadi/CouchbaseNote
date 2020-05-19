@@ -21,5 +21,9 @@ class LoginViewModel(private val appRepository: AppRepository) : ViewModel() {
     fun onLoginButtonClicked() {
         _onLoginClicked.value = Event(Unit)
     }
+
+    fun registerUser(userName: String, password: String){
+
+    }
 }
 
