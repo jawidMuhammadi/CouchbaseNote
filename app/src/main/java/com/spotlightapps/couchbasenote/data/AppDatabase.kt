@@ -33,6 +33,7 @@ class DatabaseManager private constructor(private val context: Context?) {
     fun getDatabase(userName: String): Database {
         return database ?: createDatabase(context, userName).also {
             database = it
+            registerForDatabaseChanges()
         }
     }
 
@@ -44,9 +45,10 @@ class DatabaseManager private constructor(private val context: Context?) {
             userName
         )
         return Database(DATABASE_NAME, configuration)
+
     }
 
-    fun registerForDatabaseChanges() {
+    private fun registerForDatabaseChanges() {
         database?.addChangeListener { change ->
             for (docId in change.documentIDs) {
                 val document = database?.getDocument(docId)
@@ -56,7 +58,7 @@ class DatabaseManager private constructor(private val context: Context?) {
         }
     }
 
-    fun closeDatabaseForUser(userName: String) {
+    fun closeDatabaseForUser() {
         try {
             database?.let {
                 unRegisterForDatabaseChanges()
@@ -72,6 +74,5 @@ class DatabaseManager private constructor(private val context: Context?) {
         listener?.let {
             database?.removeChangeListener(it)
         }
-
     }
 }

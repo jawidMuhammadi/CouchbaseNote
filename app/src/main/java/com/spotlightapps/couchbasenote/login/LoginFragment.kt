@@ -43,11 +43,16 @@ class LoginFragment : Fragment() {
 
     private fun subscribeUI() {
         viewModel.onLoginClicked.observe(viewLifecycleOwner, EventObserver {
-            Toast.makeText(context, "Login button clicked", Toast.LENGTH_SHORT).show()
+            val profile = viewModel.getUser(etName.text.toString())
+            profile?.let {
+                Toast.makeText(context, "Welcome back ${profile.name}", Toast.LENGTH_SHORT).show()
+            } ?: Toast.makeText(context, "User not registered", Toast.LENGTH_SHORT).show()
+
+
         })
 
         viewModel.onSignUpClicked.observe(viewLifecycleOwner, EventObserver {
-            Toast.makeText(context, "Sign up clicked", Toast.LENGTH_SHORT).show()
+            viewModel.saveUser(etName.text.toString(), etPassword.text.toString())
         })
     }
 

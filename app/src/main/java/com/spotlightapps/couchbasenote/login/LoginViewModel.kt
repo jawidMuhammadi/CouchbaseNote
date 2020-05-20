@@ -5,8 +5,13 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.spotlightapps.couchbasenote.AppRepository
 import com.spotlightapps.couchbasenote.Event
+import com.spotlightapps.couchbasenote.data.UserProfile
+import kotlinx.coroutines.*
 
 class LoginViewModel(private val appRepository: AppRepository) : ViewModel() {
+
+    private val job = Job()
+    private val uiScope = CoroutineScope(Dispatchers.Main + job)
 
     private var _onSignUpClicked = MutableLiveData<Event<Unit>>()
     val onSignUpClicked: LiveData<Event<Unit>> = _onSignUpClicked
@@ -22,8 +27,20 @@ class LoginViewModel(private val appRepository: AppRepository) : ViewModel() {
         _onLoginClicked.value = Event(Unit)
     }
 
-    fun registerUser(userName: String, password: String){
+    fun saveUser(userName: String, password: String) {
+        uiScope.launch {
+            appRepository.saveUser(userName, password)
+        }
+    }
 
+    fun getUser(userName: String): UserProfile? {
+        return appRepository.getUser(userName)
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        appRepository.databaseManager.closeDatabaseForUser()
+        job.cancel()
     }
 }
 
