@@ -11,7 +11,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
-        <activity android:name=".base.NoteListActivity" />
+        <activity android:name=".notelist.NoteListActivity" />
 
         <activity android:name=".login.LoginActivity">
             <intent-filter>

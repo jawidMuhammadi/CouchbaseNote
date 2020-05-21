@@ -5,6 +5,7 @@ import com.couchbase.lite.CouchbaseLiteException
 import com.couchbase.lite.Database
 import com.couchbase.lite.MutableDocument
 import com.spotlightapps.couchbasenote.data.DatabaseManager
+import com.spotlightapps.couchbasenote.data.NoteItem
 import com.spotlightapps.couchbasenote.data.UserProfile
 import com.spotlightapps.couchbasenote.data.UserType
 import com.spotlightapps.couchbasenote.utils.serializeToMap
@@ -59,5 +60,9 @@ class AppRepository private constructor(
             map["address"] = document.getString("address")
             return map.toDataClass()
         } ?: return null
+    }
+
+    fun getAllNotes(): List<NoteItem>? {
+        TODO("Not yet implemented")
     }
 }

@@ -75,4 +75,5 @@ class DatabaseManager private constructor(private val context: Context?) {
             database?.removeChangeListener(it)
         }
     }
+
 }

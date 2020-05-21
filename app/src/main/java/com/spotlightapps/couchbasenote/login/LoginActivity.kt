@@ -2,7 +2,6 @@ package com.spotlightapps.couchbasenote.login
 
 import android.content.Intent
 import android.os.Bundle
-import android.os.PersistableBundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProviders
@@ -10,7 +9,7 @@ import com.google.android.material.snackbar.Snackbar
 import com.spotlightapps.couchbasenote.AppRepository
 import com.spotlightapps.couchbasenote.EventObserver
 import com.spotlightapps.couchbasenote.R
-import com.spotlightapps.couchbasenote.base.NoteListActivity
+import com.spotlightapps.couchbasenote.notelist.NoteListActivity
 import kotlinx.android.synthetic.main.activity_login.*
 
 class LoginActivity : AppCompatActivity() {
