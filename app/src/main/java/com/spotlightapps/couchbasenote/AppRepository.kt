@@ -69,4 +69,12 @@ class AppRepository private constructor(
         list.add(NoteItem(3, "First title", "This is my first note written ever"))
         return list
     }
+
+    fun saveNote() {
+        TODO("Not yet implemented")
+    }
+
+    fun deleteNote() {
+        TODO("Not yet implemented")
+    }
 }

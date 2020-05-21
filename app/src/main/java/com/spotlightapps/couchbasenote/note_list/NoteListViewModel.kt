@@ -1,4 +1,4 @@
-package com.spotlightapps.couchbasenote.notelist
+package com.spotlightapps.couchbasenote.note_list
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData

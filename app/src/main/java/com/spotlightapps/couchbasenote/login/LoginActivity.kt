@@ -9,7 +9,7 @@ import com.google.android.material.snackbar.Snackbar
 import com.spotlightapps.couchbasenote.AppRepository
 import com.spotlightapps.couchbasenote.EventObserver
 import com.spotlightapps.couchbasenote.R
-import com.spotlightapps.couchbasenote.notelist.NoteListActivity
+import com.spotlightapps.couchbasenote.note_list.NoteListActivity
 import kotlinx.android.synthetic.main.activity_login.*
 
 class LoginActivity : AppCompatActivity() {

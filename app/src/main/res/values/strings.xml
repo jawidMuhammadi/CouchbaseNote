@@ -3,6 +3,10 @@
     <string name="enter_name">Enter Name</string>
     <string name="enter_password">Enter Password</string>
     <string name="login">Login</string>
-    <string name="sign_up" >Sign up</string>
+    <string name="sign_up">Sign up</string>
     <string name="wrong_password">Wrong Password</string>
+    <string name="title">Title</string>
+    <string name="description">Description</string>
+    <string name="save">save</string>
+    <string name="delete">delete</string>
 </resources>
