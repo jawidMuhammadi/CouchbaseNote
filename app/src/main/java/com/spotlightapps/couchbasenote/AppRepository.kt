@@ -1,9 +1,7 @@
 package com.spotlightapps.couchbasenote
 
 import android.content.Context
-import com.couchbase.lite.CouchbaseLiteException
-import com.couchbase.lite.Database
-import com.couchbase.lite.MutableDocument
+import com.couchbase.lite.*
 import com.spotlightapps.couchbasenote.data.DatabaseManager
 import com.spotlightapps.couchbasenote.data.NoteItem
 import com.spotlightapps.couchbasenote.data.UserProfile
@@ -25,8 +23,8 @@ class AppRepository private constructor(
             AppRepository(context, DatabaseManager.getInstance(context))
     }
 
-    private fun getDatabase(userName: String): Database? {
-        return databaseManager.getDatabase(userName)
+    private fun getDatabase(userName: String = ""): Database? {
+        return databaseManager.getDatabase()
     }
 
     fun saveUser(userName: String, password: String) {
@@ -52,29 +50,57 @@ class AppRepository private constructor(
 
     fun getUser(userName: String): UserProfile? {
         val document = getDatabase(userName)?.getDocument(userName)
-        document?.let {
-            val map = HashMap<String, Any>()
-            map["type"] = document.getString("type")
-            map["name"] = document.getString("name")
-            map["password"] = document.getString("password")
-            map["address"] = document.getString("address")
-            return map.toDataClass()
-        } ?: return null
+        val map = document?.toMap()
+        return map?.toDataClass()
+
     }
 
-    fun getAllNotes(): List<NoteItem>? {
+    fun getAllNotes(userName: String): List<NoteItem>? {
         val list = ArrayList<NoteItem>()
-        list.add(NoteItem(1, "First title", "This is my first note written ever"))
-        list.add(NoteItem(2, "First title", "This is my first note written ever"))
-        list.add(NoteItem(3, "First title", "This is my first note written ever"))
+        getDatabase(userName)?.let {
+            val query = QueryBuilder
+                .select(SelectResult.all())
+                .from(DataSource.database(it))
+
+            val resultSet = query.execute()
+            var result: Result? = resultSet.next()
+            while (result != null) {
+                val valueMap = result.getDictionary(getDatabase(userName)!!.name)
+                val noteItem = valueMap.toMap().toDataClass<NoteItem>()
+                list.add(noteItem)
+                result = resultSet.next()
+            }
+
+//            query.addChangeListener { change ->
+//                val resultSet = change.results
+//                var result: Result? = resultSet.next()
+//                while (result != null) {
+//                    val valueMap = result.getDictionary(getDatabase(userName)!!.name)
+//                    val noteItem = valueMap.toMap().toDataClass<NoteItem>()
+//                    list.add(noteItem)
+//                    result = resultSet.next()
+//                }
+//            }
+        }
         return list
     }
 
-    fun saveNote() {
-        TODO("Not yet implemented")
+    fun saveNote(noteItem: NoteItem) {
+        val noteMap = noteItem.serializeToMap()
+        val document = MutableDocument(noteMap)
+        document.setValue("noteId", document.id)
+        try {
+            getDatabase()?.save(document)
+        } catch (e: CouchbaseLiteException) {
+            e.printStackTrace()
+        }
     }
 
-    fun deleteNote() {
-        TODO("Not yet implemented")
+    fun deleteNote(document: Document) {
+        databaseManager.getDatabase().delete(document)
+    }
+
+    fun getDocumentById(docId: String): Document? {
+        return databaseManager.getDatabase().getDocument(docId)
     }
 }

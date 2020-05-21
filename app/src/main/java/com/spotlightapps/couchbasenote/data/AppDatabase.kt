@@ -5,7 +5,7 @@ import com.couchbase.lite.CouchbaseLiteException
 import com.couchbase.lite.Database
 import com.couchbase.lite.DatabaseConfiguration
 import com.couchbase.lite.ListenerToken
-import com.spotlightapps.couchbasenote.DATABASE_NAME
+import com.spotlightapps.couchbasenote.NOTE_DATABASE_NAME
 
 /**
  * Created by Ahmad Jawid Muhammadi on 19/5/20
@@ -30,38 +30,34 @@ class DatabaseManager private constructor(private val context: Context?) {
         }
     }
 
-    fun getDatabase(userName: String): Database {
-        return database ?: createDatabase(context, userName).also {
+    fun getDatabase(userName: String = "jawid"): Database {
+        return database ?: createDatabase(context, userName, NOTE_DATABASE_NAME).also {
             database = it
-            registerForDatabaseChanges()
+            //registerForDatabaseChanges()
         }
     }
+//    fun getNoteDatabase(userName: String):Database{
+//        return database?:createDatabase(context)
+//    }
 
-    private fun createDatabase(context: Context?, userName: String): Database {
+    private fun createDatabase(
+        context: Context?,
+        userName: String,
+        databaseName: String
+    ): Database {
         val configuration = DatabaseConfiguration()
         configuration.directory = String.format(
             "%s/%s",
             context?.filesDir,
             userName
         )
-        return Database(DATABASE_NAME, configuration)
+        return Database(databaseName, configuration)
 
-    }
-
-    private fun registerForDatabaseChanges() {
-        database?.addChangeListener { change ->
-            for (docId in change.documentIDs) {
-                val document = database?.getDocument(docId)
-                document?.let {
-                }
-            }
-        }
     }
 
     fun closeDatabaseForUser() {
         try {
             database?.let {
-                unRegisterForDatabaseChanges()
                 database?.close()
                 database = null
             }
@@ -69,11 +65,4 @@ class DatabaseManager private constructor(private val context: Context?) {
             e.printStackTrace()
         }
     }
-
-    private fun unRegisterForDatabaseChanges() {
-        listener?.let {
-            database?.removeChangeListener(it)
-        }
-    }
-
 }

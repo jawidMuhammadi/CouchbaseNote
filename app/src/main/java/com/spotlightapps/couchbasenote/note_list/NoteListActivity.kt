@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.spotlightapps.couchbasenote.AppRepository
+import com.spotlightapps.couchbasenote.NOTE_ID
 import com.spotlightapps.couchbasenote.R
 import com.spotlightapps.couchbasenote.adapters.NoteListAdapter
 import com.spotlightapps.couchbasenote.adapters.OnNoteItemClickListener
@@ -21,12 +22,13 @@ class NoteListActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_note_list)
 
-        val factory = NoteListViewModelFactory(AppRepository.getInstance(this))
+        val factory = NoteListViewModelFactory(application, AppRepository.getInstance(this))
         viewModel = ViewModelProviders.of(this, factory).get(NoteListViewModel::class.java)
 
-        val adapter = NoteListAdapter(OnNoteItemClickListener { position ->
+        val adapter = NoteListAdapter(OnNoteItemClickListener { noteId ->
             val intent = Intent(this, NewNoteActivity::class.java).apply {
                 action = NoteAction.EDIT.value
+                putExtra(NOTE_ID, noteId)
             }
             startActivity(intent)
         })
@@ -45,5 +47,6 @@ class NoteListActivity : AppCompatActivity() {
         viewModel.noteList.observe(this, Observer { noteList ->
             adapter.submitList(noteList)
         })
+
     }
 }

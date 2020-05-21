@@ -14,14 +14,14 @@
             android:name=".new_note.NewNoteActivity"
             android:parentActivityName=".note_list.NoteListActivity" />
 
-        <activity android:name=".note_list.NoteListActivity" />
-        <activity android:name=".login.LoginActivity">
+        <activity android:name=".note_list.NoteListActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".login.LoginActivity"></activity>
     </application>
 
 </manifest>

@@ -10,6 +10,7 @@ import com.spotlightapps.couchbasenote.AppRepository
 import com.spotlightapps.couchbasenote.EventObserver
 import com.spotlightapps.couchbasenote.R
 import com.spotlightapps.couchbasenote.note_list.NoteListActivity
+import com.spotlightapps.couchbasenote.utils.PrefUtils
 import kotlinx.android.synthetic.main.activity_login.*
 
 class LoginActivity : AppCompatActivity() {
@@ -37,6 +38,7 @@ class LoginActivity : AppCompatActivity() {
             val profile = viewModel.getUser(etName.text.toString())
             profile?.let {
                 if (profile.password == etPassword.text.toString().trim()) {
+                    PrefUtils.getInstance(context = this).saveCurrentUser(profile.name)
                     navigateToNoteListActivity()
                 } else {
                     Snackbar.make(

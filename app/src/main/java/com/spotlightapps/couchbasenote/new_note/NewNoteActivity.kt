@@ -4,9 +4,13 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.spotlightapps.couchbasenote.AppRepository
+import com.spotlightapps.couchbasenote.EventObserver
+import com.spotlightapps.couchbasenote.NOTE_ID
 import com.spotlightapps.couchbasenote.R
+import com.spotlightapps.couchbasenote.utils.PrefUtils
 import kotlinx.android.synthetic.main.activity_new_note.*
 
 class NewNoteActivity : AppCompatActivity() {
@@ -18,10 +22,29 @@ class NewNoteActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_new_note)
 
-        noteAction = intent.action
-
         val factory = NewNoteViewModelFactory(AppRepository.getInstance(this))
         viewModel = ViewModelProviders.of(this, factory).get(NewNoteViewModel::class.java)
+
+        noteAction = intent.action
+        if (noteAction == NoteAction.EDIT.value) {
+            viewModel.noteId.value = intent.getStringExtra(NOTE_ID)
+        }
+
+        subscribeUI()
+    }
+
+    private fun subscribeUI() {
+        viewModel.onSaveDone.observe(this, EventObserver {
+            // finish()
+        })
+        viewModel.noteItem.observe(this, Observer {
+            it?.let {
+                etTitle.setText(it.title)
+                etDescription.setText(it.description)
+                supportActionBar?.title = it.noteId
+            }
+        })
+
     }
 
     override fun onPrepareOptionsMenu(menu: Menu?): Boolean {
@@ -39,11 +62,17 @@ class NewNoteActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.menu_save -> {
-                viewModel.saveNote(etTitle.text.toString(), etDescription.text.toString())
+                viewModel.saveNote(
+                    PrefUtils.getInstance(this).getCurrentUser()!!,
+                    etTitle.text.toString(),
+                    etDescription.text.toString()
+                )
+                finish()
                 true
             }
             R.id.menu_delete -> {
                 viewModel.deleteNote()
+                finish()
                 true
             }
             else -> false
