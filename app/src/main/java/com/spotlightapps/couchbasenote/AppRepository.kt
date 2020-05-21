@@ -63,6 +63,10 @@ class AppRepository private constructor(
     }
 
     fun getAllNotes(): List<NoteItem>? {
-        TODO("Not yet implemented")
+        val list = ArrayList<NoteItem>()
+        list.add(NoteItem(1, "First title", "This is my first note written ever"))
+        list.add(NoteItem(2, "First title", "This is my first note written ever"))
+        list.add(NoteItem(3, "First title", "This is my first note written ever"))
+        return list
     }
 }

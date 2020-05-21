@@ -57,9 +57,10 @@ class NoteViewHolder private constructor(itemView: View) : RecyclerView.ViewHold
     fun bind(noteItem: NoteItem, onNoteItemClickListener: OnNoteItemClickListener) {
         itemView.tvTitle.text = noteItem.title
         itemView.tvDescription.text = noteItem.description
+        itemView.setOnClickListener { onNoteItemClickListener.onClick(adapterPosition) }
     }
 }
 
-class OnNoteItemClickListener(val clickListener: (id: Long) -> Unit) {
-    fun onClick(id: Long) = clickListener(id)
+class OnNoteItemClickListener(val clickListener: (id: Int) -> Unit) {
+    fun onClick(id: Int) = clickListener(id)
 }

@@ -22,8 +22,8 @@ class NoteListActivity : AppCompatActivity() {
         val factory = NoteListViewModelFactory(AppRepository.getInstance(this))
         viewModel = ViewModelProviders.of(this, factory).get(NoteListViewModel::class.java)
 
-        val adapter = NoteListAdapter(OnNoteItemClickListener {
-            Toast.makeText(this, "item clicked", Toast.LENGTH_SHORT).show()
+        val adapter = NoteListAdapter(OnNoteItemClickListener { position ->
+            Toast.makeText(this, "$position item clicked", Toast.LENGTH_SHORT).show()
         })
         rvNoteList.adapter = adapter
         subscribeUI(adapter)
